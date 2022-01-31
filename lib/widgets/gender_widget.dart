@@ -6,26 +6,31 @@ class GenderWidget extends StatelessWidget {
     Key key,
     @required this.icon,
     @required this.text,
+    @required this.onTap,
   }) : super(key: key);
 
   final IconData icon;
   final String text;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 28.0),
-      child: Column(
-        children: [
-          FaIcon(
-            icon,
-            size: 85.0,
-          ),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 25.0),
-          ),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 28.0),
+        child: Column(
+          children: [
+            FaIcon(
+              icon,
+              size: 85.0,
+            ),
+            Text(
+              text,
+              style: const TextStyle(fontSize: 25.0),
+            ),
+          ],
+        ),
       ),
     );
   }
