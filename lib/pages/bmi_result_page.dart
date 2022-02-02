@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kurs4_sabak7_bmi/brain/bmi_brain.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_card.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_main_button.dart';
 
 class BmiResultPage extends StatelessWidget {
-  const BmiResultPage({Key key}) : super(key: key);
+  const BmiResultPage({@required this.bmiResult, Key key}) : super(key: key);
+
+  final double bmiResult;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class BmiResultPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  'dasdas'.toUpperCase(),
+                  bmiBrain.getResult(bmiResult),
                   style: TextStyle(
                     color: Color(0xFF43DA8C),
                     fontSize: 20,
@@ -31,7 +34,7 @@ class BmiResultPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '92',
+                  bmiResult.toStringAsFixed(1),
                   style: TextStyle(
                     fontSize: 100,
                     fontWeight: FontWeight.bold,
@@ -40,7 +43,7 @@ class BmiResultPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Text(
-                    ' dasdas dasdas dasdas dasdas dasdas dasdas dasdas dasdas dasdas',
+                    bmiBrain.getInterpretation(bmiResult),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -51,7 +54,9 @@ class BmiResultPage extends StatelessWidget {
       ),
       bottomNavigationBar: CustomMainButton(
         buttonText: 'Re-calculate',
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

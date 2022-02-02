@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kurs4_sabak7_bmi/brain/bmi_brain.dart';
 import 'package:kurs4_sabak7_bmi/pages/bmi_result_page.dart';
 import 'package:kurs4_sabak7_bmi/widgets/age_or_weight_widget.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_card.dart';
@@ -21,7 +22,7 @@ class BmiPage extends StatefulWidget {
 }
 
 class _BmiPageState extends State<BmiPage> {
-  double _sliderValue = 170;
+  double _height = 170;
 
   int _weight = 60;
   int _age = 18;
@@ -92,10 +93,10 @@ class _BmiPageState extends State<BmiPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22.0),
                     child: HeightWidget(
-                      sliderValue: _sliderValue,
+                      sliderValue: _height,
                       onChanged: (double ozgorgon) {
                         setState(() {
-                          _sliderValue = ozgorgon;
+                          _height = ozgorgon;
                         });
                       },
                     ),
@@ -168,8 +169,14 @@ class _BmiPageState extends State<BmiPage> {
       bottomNavigationBar: CustomMainButton(
         buttonText: 'Calculate',
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BmiResultPage()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BmiResultPage(
+                bmiResult: bmiBrain.calculateBmi(_weight, _height),
+              ),
+            ),
+          );
         },
       ),
     );
