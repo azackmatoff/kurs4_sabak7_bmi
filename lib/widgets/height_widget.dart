@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/colors/app_colors.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/texts/app_texts.dart';
 
 class HeightWidget extends StatelessWidget {
   const HeightWidget({
@@ -16,7 +18,7 @@ class HeightWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'HEIGHT',
+          AppTexts.height.toUpperCase(),
           style: const TextStyle(fontSize: 25.0),
         ),
         Row(
@@ -29,15 +31,15 @@ class HeightWidget extends StatelessWidget {
               style: TextStyle(fontSize: 60),
             ),
             const SizedBox(width: 3),
-            Text('cm', style: TextStyle(fontSize: 20)),
+            Text(AppTexts.cm, style: TextStyle(fontSize: 20)),
           ],
         ),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Colors.red,
-            inactiveTrackColor: Colors.white,
-            overlayColor: Color(0x29EB1555),
-            thumbColor: Colors.red,
+            activeTrackColor: AppColors.red,
+            inactiveTrackColor: AppColors.white,
+            overlayColor: AppColors.redDark,
+            thumbColor: AppColors.red,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 14.0),
             overlayShape: RoundSliderOverlayShape(overlayRadius: 24.0),
           ),

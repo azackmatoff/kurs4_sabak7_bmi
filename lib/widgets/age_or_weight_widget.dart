@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/text_styles/app_text_styles.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/texts/app_texts.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_circle_button.dart';
 
 class AgeAndWeightWidget extends StatelessWidget {
@@ -25,20 +27,18 @@ class AgeAndWeightWidget extends StatelessWidget {
           Text(title),
           Text(
             ageOrWeight,
-            style: TextStyle(
-              fontSize: 60.0,
-            ),
+            style: AppTextStyles.ageOrWeight,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomCircleButton(
-                buttonText: '-',
+                buttonText: AppTexts.minus,
                 onPressed: decrement,
               ),
               const SizedBox(width: 5),
               CustomCircleButton(
-                buttonText: '+',
+                buttonText: AppTexts.plus,
                 onPressed: increment,
               ),
             ],

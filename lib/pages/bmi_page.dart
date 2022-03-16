@@ -1,18 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kurs4_sabak7_bmi/brain/bmi_brain.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/colors/app_colors.dart';
+import 'package:kurs4_sabak7_bmi/app_constants/texts/app_texts.dart';
+import 'package:kurs4_sabak7_bmi/app_data/enums/app_enums.dart';
+import 'package:kurs4_sabak7_bmi/app_data/repos/bmi_repo.dart';
+
 import 'package:kurs4_sabak7_bmi/pages/bmi_result_page.dart';
 import 'package:kurs4_sabak7_bmi/widgets/age_or_weight_widget.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_card.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_main_button.dart';
 import 'package:kurs4_sabak7_bmi/widgets/gender_widget.dart';
 import 'package:kurs4_sabak7_bmi/widgets/height_widget.dart';
-
-enum Gender { NONE, MALE, FEMALE }
-
-enum Toyota { Camry, Corola, Rav4, None }
 
 class BmiPage extends StatefulWidget {
   const BmiPage({Key key}) : super(key: key);
@@ -27,11 +25,8 @@ class _BmiPageState extends State<BmiPage> {
   int _weight = 60;
   int _age = 18;
 
-  Color _selectedColor = Color(0xff24263B);
-  Color _unSelectedColor = Color(0xFF181B2C);
-
-  bool _maleSelected = false;
-  bool _femaleSelected = false;
+  Color _selectedColor = AppColors.selected;
+  Color _unSelectedColor = AppColors.unselected;
 
   Gender _gender = Gender.NONE;
 
@@ -60,12 +55,8 @@ class _BmiPageState extends State<BmiPage> {
                         : _unSelectedColor,
                     child: GenderWidget(
                       icon: FontAwesomeIcons.mars,
-                      text: 'MALE',
-                      onTap: () {
-                        setState(() {
-                          _gender = Gender.MALE;
-                        });
-                      },
+                      text: AppTexts.male.toUpperCase(),
+                      onTap: () => _chooseGender(Gender.MALE),
                     ),
                   ),
                   SizedBox(width: 20),
@@ -75,21 +66,15 @@ class _BmiPageState extends State<BmiPage> {
                         : _unSelectedColor,
                     child: GenderWidget(
                       icon: FontAwesomeIcons.venus,
-                      text: 'FEMALE',
-                      onTap: () {
-                        setState(() {
-                          _gender = Gender.FEMALE;
-                          // _femaleSelected = !_femaleSelected;
-                          // _maleSelected = false;
-                        });
-                      },
+                      text: AppTexts.female.toUpperCase(),
+                      onTap: () => _chooseGender(Gender.FEMALE),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               CustomCard(
-                  bgColor: Color(0xff24263B),
+                  bgColor: AppColors.secondaryColor,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22.0),
                     child: HeightWidget(
@@ -105,9 +90,9 @@ class _BmiPageState extends State<BmiPage> {
               Row(
                 children: [
                   CustomCard(
-                    bgColor: Color(0xff24263B),
+                    bgColor: AppColors.secondaryColor,
                     child: AgeAndWeightWidget(
-                      title: 'WEIGHT',
+                      title: AppTexts.weight.toUpperCase(),
                       ageOrWeight: _weight.toString(),
                       decrement: () {
                         setState(() {
@@ -123,9 +108,9 @@ class _BmiPageState extends State<BmiPage> {
                   ),
                   const SizedBox(width: 20),
                   CustomCard(
-                    bgColor: Color(0xff24263B),
+                    bgColor: AppColors.secondaryColor,
                     child: AgeAndWeightWidget(
-                      title: 'AGE',
+                      title: AppTexts.age.toUpperCase(),
                       ageOrWeight: _age.toString(),
                       decrement: () {
                         setState(() {
@@ -141,39 +126,19 @@ class _BmiPageState extends State<BmiPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-              //// eski misal
-              // Positioned(
-              //   bottom: 0,
-              //   child: SizedBox(
-              //     width: MediaQuery.of(context).size.width,
-              //     height: 60,
-              //     child: InkWell(
-              //       onTap: () {},
-              //       child: Container(
-              //         color: Colors.red,
-              //         child: Center(
-              //             child: Text(
-              //           'CALCULATE',
-              //           style: const TextStyle(fontSize: 25.0),
-              //         )),
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: CustomMainButton(
-        buttonText: 'Calculate',
+        buttonText: AppTexts.calculate,
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BmiResultPage(
-                bmiResult: bmiBrain.calculateBmi(_weight, _height),
+                bmiResult: bmiRepo.calculateBmi(_weight, _height),
               ),
             ),
           );
@@ -182,31 +147,10 @@ class _BmiPageState extends State<BmiPage> {
     );
   }
 
-  /// bul jon gana misal, bul kodtu koldonboybuz
-  /// oorduna biz jasagan Widgetterdi koldonobuz
-  _buildContainer(IconData icon, String text) {
-    return Expanded(
-      child: Container(
-        decoration: const BoxDecoration(
-            color: Color(0xff24263B),
-            borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 28.0),
-          child: Column(
-            children: [
-              FaIcon(
-                icon,
-                size: 85.0,
-              ),
-              Text(
-                text,
-                style: const TextStyle(fontSize: 25.0),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  void _chooseGender(Gender _chosenGender) {
+    setState(() {
+      _gender = _chosenGender;
+    });
   }
 }
 
