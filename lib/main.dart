@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kurs4_sabak7_bmi/pages/bmi_page.dart';
 import 'package:kurs4_sabak7_bmi/utils/theme/app_theme.dart';
 
@@ -11,11 +12,11 @@ class BmiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BMI Calculator',
       theme: AppTheme.darkTheme(),
-      home: const BmiPage(),
+      home: BmiPage(),
     );
   }
 }

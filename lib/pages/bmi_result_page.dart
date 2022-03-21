@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kurs4_sabak7_bmi/app_constants/colors/app_colors.dart';
 import 'package:kurs4_sabak7_bmi/app_constants/text_styles/app_text_styles.dart';
 import 'package:kurs4_sabak7_bmi/app_constants/texts/app_texts.dart';
-import 'package:kurs4_sabak7_bmi/app_data/repos/bmi_repo.dart';
+
+import 'package:kurs4_sabak7_bmi/controllers/bmi_result_controller.dart';
 
 import 'package:kurs4_sabak7_bmi/widgets/custom_card.dart';
 import 'package:kurs4_sabak7_bmi/widgets/custom_main_button.dart';
 
 class BmiResultPage extends StatelessWidget {
-  const BmiResultPage({@required this.bmiResult, Key key}) : super(key: key);
+  BmiResultPage({Key key}) : super(key: key);
 
-  final double bmiResult;
+  final BmiResultController _bmiResultController =
+      Get.put<BmiResultController>(BmiResultController());
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,7 @@ class BmiResultPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width * 0.9,
           child: CustomCard(
@@ -29,19 +38,26 @@ class BmiResultPage extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  bmiRepo.getResult(bmiResult),
-                  style: AppTextStyles.resultSubject,
+                Obx(
+                  () => Text(
+                    _bmiResultController.title.value,
+                    style: AppTextStyles.resultSubject,
+                  ),
                 ),
-                Text(
-                  bmiResult.toStringAsFixed(1),
-                  style: AppTextStyles.resultBigText,
+                Obx(
+                  () => Text(
+                    _bmiResultController.result.value.toStringAsFixed(1),
+                    // bmiResult.toStringAsFixed(1),
+                    style: AppTextStyles.resultBigText,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Text(
-                    bmiRepo.getInterpretation(bmiResult),
-                    textAlign: TextAlign.center,
+                  child: Obx(
+                    () => Text(
+                      _bmiResultController.description.value,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ],

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:kurs4_sabak7_bmi/app_constants/colors/app_colors.dart';
 import 'package:kurs4_sabak7_bmi/app_constants/texts/app_texts.dart';
 import 'package:kurs4_sabak7_bmi/app_data/enums/app_enums.dart';
-import 'package:kurs4_sabak7_bmi/app_data/repos/bmi_repo.dart';
+
+import 'package:kurs4_sabak7_bmi/controllers/bmi_page_controller.dart';
 
 import 'package:kurs4_sabak7_bmi/pages/bmi_result_page.dart';
 import 'package:kurs4_sabak7_bmi/widgets/age_or_weight_widget.dart';
@@ -12,29 +14,17 @@ import 'package:kurs4_sabak7_bmi/widgets/custom_main_button.dart';
 import 'package:kurs4_sabak7_bmi/widgets/gender_widget.dart';
 import 'package:kurs4_sabak7_bmi/widgets/height_widget.dart';
 
-class BmiPage extends StatefulWidget {
-  const BmiPage({Key key}) : super(key: key);
+class BmiPage extends StatelessWidget {
+  BmiPage({Key key}) : super(key: key);
 
-  @override
-  _BmiPageState createState() => _BmiPageState();
-}
-
-class _BmiPageState extends State<BmiPage> {
-  double _height = 170;
-
-  int _weight = 60;
-  int _age = 18;
-
-  Color _selectedColor = AppColors.selected;
-  Color _unSelectedColor = AppColors.unselected;
-
-  Gender _gender = Gender.NONE;
+  final BmiPageController _bmiPageController =
+      Get.put<BmiPageController>(BmiPageController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BMI CALCULATOR'),
+        title: const Text('BMI CALCULATOR'),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -46,28 +36,32 @@ class _BmiPageState extends State<BmiPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  //method jakshi versiya ems
-                  // _buildContainer(FontAwesomeIcons.mars, 'MALE'),
                   const SizedBox(height: 20),
-                  CustomCard(
-                    bgColor: _gender == Gender.MALE
-                        ? _selectedColor
-                        : _unSelectedColor,
-                    child: GenderWidget(
-                      icon: FontAwesomeIcons.mars,
-                      text: AppTexts.male.toUpperCase(),
-                      onTap: () => _chooseGender(Gender.MALE),
+                  Obx(
+                    () => CustomCard(
+                      bgColor: _bmiPageController.gender.value == Gender.MALE
+                          ? AppColors.selected
+                          : AppColors.unselected,
+                      child: GenderWidget(
+                        icon: FontAwesomeIcons.mars,
+                        text: AppTexts.male.toUpperCase(),
+                        onTap: () =>
+                            _bmiPageController.changeGender(Gender.MALE),
+                      ),
                     ),
                   ),
-                  SizedBox(width: 20),
-                  CustomCard(
-                    bgColor: _gender == Gender.FEMALE
-                        ? _selectedColor
-                        : _unSelectedColor,
-                    child: GenderWidget(
-                      icon: FontAwesomeIcons.venus,
-                      text: AppTexts.female.toUpperCase(),
-                      onTap: () => _chooseGender(Gender.FEMALE),
+                  const SizedBox(width: 20),
+                  Obx(
+                    () => CustomCard(
+                      bgColor: _bmiPageController.gender.value == Gender.FEMALE
+                          ? AppColors.selected
+                          : AppColors.unselected,
+                      child: GenderWidget(
+                        icon: FontAwesomeIcons.venus,
+                        text: AppTexts.female.toUpperCase(),
+                        onTap: () =>
+                            _bmiPageController.changeGender(Gender.FEMALE),
+                      ),
                     ),
                   ),
                 ],
@@ -77,13 +71,13 @@ class _BmiPageState extends State<BmiPage> {
                   bgColor: AppColors.secondaryColor,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22.0),
-                    child: HeightWidget(
-                      sliderValue: _height,
-                      onChanged: (double ozgorgon) {
-                        setState(() {
-                          _height = ozgorgon;
-                        });
-                      },
+                    child: Obx(
+                      () => HeightWidget(
+                        sliderValue: _bmiPageController.getHeight.value,
+                        onChanged: (double ozgorgon) {
+                          _bmiPageController.setHeight = ozgorgon;
+                        },
+                      ),
                     ),
                   )),
               const SizedBox(height: 20),
@@ -91,37 +85,26 @@ class _BmiPageState extends State<BmiPage> {
                 children: [
                   CustomCard(
                     bgColor: AppColors.secondaryColor,
-                    child: AgeAndWeightWidget(
-                      title: AppTexts.weight.toUpperCase(),
-                      ageOrWeight: _weight.toString(),
-                      decrement: () {
-                        setState(() {
-                          _weight--;
-                        });
-                      },
-                      increment: () {
-                        setState(() {
-                          _weight++;
-                        });
-                      },
+                    child: Obx(
+                      () => AgeAndWeightWidget(
+                        title: AppTexts.weight.toUpperCase(),
+                        ageOrWeight:
+                            _bmiPageController.getWeight.value.toString(),
+                        decrement: () => _bmiPageController.decrementWeight(),
+                        increment: () => _bmiPageController.incrementWeight(),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 20),
                   CustomCard(
                     bgColor: AppColors.secondaryColor,
-                    child: AgeAndWeightWidget(
-                      title: AppTexts.age.toUpperCase(),
-                      ageOrWeight: _age.toString(),
-                      decrement: () {
-                        setState(() {
-                          _age--;
-                        });
-                      },
-                      increment: () {
-                        setState(() {
-                          _age++;
-                        });
-                      },
+                    child: Obx(
+                      () => AgeAndWeightWidget(
+                        title: AppTexts.age.toUpperCase(),
+                        ageOrWeight: _bmiPageController.getAge.value.toString(),
+                        decrement: () => _bmiPageController.decrementAge(),
+                        increment: () => _bmiPageController.incrementAge(),
+                      ),
                     ),
                   ),
                 ],
@@ -137,9 +120,7 @@ class _BmiPageState extends State<BmiPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BmiResultPage(
-                bmiResult: bmiRepo.calculateBmi(_weight, _height),
-              ),
+              builder: (context) => BmiResultPage(),
             ),
           );
         },
@@ -147,11 +128,11 @@ class _BmiPageState extends State<BmiPage> {
     );
   }
 
-  void _chooseGender(Gender _chosenGender) {
-    setState(() {
-      _gender = _chosenGender;
-    });
-  }
+  // void _chooseGender(Gender _chosenGender) {
+  //   setState(() {
+  //     _gender = _chosenGender;
+  //   });
+  // }
 }
 
 
